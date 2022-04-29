@@ -3,8 +3,8 @@ import string
 
 
 def text_analyser(*args):
-    # Return upper case, lower case
-    # punctuation and spaces count from a text
+    """Return upper case, lower case and
+    punctuation and spaces count from a text"""
     if len(args) > 1:
         print("ERROR")
         return
