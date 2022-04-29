@@ -7,21 +7,21 @@ usageMsg = """Usage: python operations.py <number1> <number2>
                 Example:
                 python operations.py 10 3"""
 
-#Check arg count
-if argCount != 2 :
+# Check arg count
+if argCount != 2:
     if argCount > 2:
         print("InputError: too many arguments\n")
     print(usageMsg)
     exit()
 
-#Check arg format
+# Check arg format
 for item in args:
-        if item.isdigit() == False:
-            print("InputError: only numbers\n")
-            print(usageMsg)
-            exit()
+    if !item.isdigit():
+        print("InputError: only numbers\n")
+        print(usageMsg)
+        exit()
 
-#Print results
+# Print results
 a = int(args[0])
 b = int(args[1])
 if b == 0:

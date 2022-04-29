@@ -2,7 +2,7 @@ import sys
 
 args = sys.argv
 args.pop(0)
-code = {'A': '.-',     'B': '-...',   'C': '-.-.', 
+code = {'A': '.-',     'B': '-...',   'C': '-.-.',
         'D': '-..',    'E': '.',      'F': '..-.',
         'G': '--.',    'H': '....',   'I': '..',
         'J': '.---',   'K': '-.-',    'L': '.-..',
@@ -14,17 +14,17 @@ code = {'A': '.-',     'B': '-...',   'C': '-.-.',
         '0': '-----',  '1': '.----',  '2': '..---',
         '3': '...--',  '4': '....-',  '5': '.....',
         '6': '-....',  '7': '--...',  '8': '---..',
-        '9': '----.',  ' ': ' / ' 
+        '9': '----.',  ' ': ' / '
         }
 i = 0
-res =""
+res = ""
 for word in args:
     for letter in word:
         tmp = letter.upper()
         if tmp in code:
             res += code[tmp]
         elif tmp != ' ':
-            print("Error %c is not alphanumeric" %tmp)
+            print("Error %c is not alphanumeric" % tmp)
             exit()
     if i < len(args):
         res += " / "

@@ -1,16 +1,18 @@
 import sys
 import string
 
+
 def text_analyser(*args):
-    """Return upper case, lower case, punctuation and spaces count from a text""" 
+    # Return upper case, lower case
+    # punctuation and spaces count from a text
     if len(args) > 1:
         print("ERROR")
         return
 
     text = ""
-    if len(args) == 0 :
+    if len(args) == 0:
         text = input("Enter your own text:\n")
-    else :
+    else:
         text = args[0]
 
     low = 0
