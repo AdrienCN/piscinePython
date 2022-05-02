@@ -24,17 +24,21 @@ def check_list(arg_list):
 
 class  Vector:
 
-    def __init__(self, arg_one, arg_two=None):
+    def __init__(self, arg_one):
         
         # RANGE constructor
-        if arg_one and arg_two:
-            assert check_isnumber(arg_one, arg_two), "Range constructor param error"
-            range_start = arg_one
-            range_end = arg_two
+        if isinstance(arg_one, tuple):
+            range_start = arg_one[0]
+            range_end = arg_one[1]
+            if len(arg_one) > 2:
+                raise ValueError("Range constructor len > 2")
+            if not check_isnumber(range_start, range_end):
+                raise ValueError("Range constructor param error")
             i = range_start
             self.shape = range_end - range_start
             self.values = []
-            assert self.shape >= 0, "Init range must be >= 0"
+            if not self.shape >= 0:
+                raise ValueError("Init range must be >= 0")
             while i < range_end:
                 self.values.append([float(i)])
                 i += 1
@@ -43,7 +47,8 @@ class  Vector:
             # DEFAULT constructor
             if isinstance(arg_one, list):
                 arg_list = arg_one
-                assert check_list(arg_list), "List constructor must be floats and cannot be empty" 
+                if not check_list(arg_list):
+                    raise ValueError("List constructor must be floats and cannot be empty") 
                 self.values = arg_list
                 # Liste de Liste : COL
                 if isinstance(arg_list[0], list):
@@ -55,8 +60,10 @@ class  Vector:
             # SIZE constructor
             else:
                size = arg_one
-               assert check_isnumber(size), "Size constructor param error"
-               assert size >= 0, "Size init must be >= 0" 
+               if not check_isnumber(size):
+                   raise ValueError("Size constructor param error")
+               if  not size >= 0:
+                   raise ValueError("Size init must be >= 0")
                i = 0.0
                self.values = []
                while i < size:
@@ -90,12 +97,10 @@ class  Vector:
             raise ValueError("Vector - ", type(other), " not available")
         if self.shape != other.shape:
             raise ValueError("Operands [-] Vector have NOT  the same dimension")
-        # ROW add
         tmp = []
         if self.shape[0] == 1:
             for i in range(self.shape[1]):
                 tmp.append(self.values[i] - other.values[i])
-        # COL add
         else:
             for i in range(self.shape[0]):
                 tmp.append([self.values[i][0] - other.values[i][0]])
@@ -114,10 +119,8 @@ class  Vector:
             for i in range(self.shape[1]):
                 tmp.append(self.values[i] / other)
         else:
-            i = 0
-            while i < self.shape[0]:
-                print("-", self.values[i]) 
-                i += 1
+            for i in range(self.shape[0]):
+                tmp.append([self.values[i][0] / other])
         return Vector(tmp)
             
     def __rtruediv__(self, other):
@@ -132,7 +135,7 @@ class  Vector:
                 tmp.append(self.values[i] * other)
         else:
             for i in range(self.shape[0]):
-                tmp.append([self.shape[i][0] * other])
+                tmp.append([self.values[i][0] * other])
         return Vector(tmp)
     
     def __rmul__(self, other):
@@ -145,23 +148,26 @@ class  Vector:
     def __repr__(self):
         return f"Vector(shape({self.shape}), values({self.values}))"
 
-        
- 
+    def dot(self, other):
+        if not isinstance(other, Vector):
+            raise ValueError("Vector DOT ", type(other), " not available")
+        if self.shape != other.shape:
+            raise ValueError("Operands [DOT] Vector have NOT the same dimension")
+        tmp = []
+        if self.shape[0] == 1:
+            for i in range(self.shape[1]):
+                tmp.append(self.values[i] * other.values[i])
+        else:
+            for i in range(self.shape[0]):
+                tmp.append([self.values[i][0] * other.values[i][0]])
+        return Vector(tmp)
 
-class Test:
-    def __init__(self, nb):
-        self.tmp = nb
-
-    def __add__(self, other):
-        return (self.tmp + other.tmp)
-
-foo = Vector(3)
-bar = Vector([[3.0], [2.0], [1.0]])
-print("FOO values : ", foo.values, " | shape : ", foo.shape)
-print("BAR values : ", bar.values, " | shape : ", bar.shape)
-baz = bar + foo
-print("BAZ  values : ", baz.values, " | shape : ", baz.shape)
-tmp = baz / 2.0
-
-print(str(baz))
-print(repr(foo))
+    def T(self):
+        tmp = []
+        if self.shape[0] == 1:
+            for i in range(self.shape[1]):
+                tmp.append([self.values[i]])
+        else:
+            for i in range(self.shape[0]):
+                tmp.append(self.values[i][0])
+        return Vector(tmp)
