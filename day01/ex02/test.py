@@ -1,6 +1,6 @@
 from vector import Vector
 
-#Tests des constructeurs
+# Tests des constructeurs
 try:
     print("\n-------------> INT CONSTRUCTEUR")
     vector1 = Vector(3)
@@ -8,7 +8,7 @@ try:
     print(vector1.shape)
 
     print("\n-------------> RANGE CONSTRUCTEUR")
-    vector2 = Vector((10,15))
+    vector2 = Vector((10, 15))
     print(vector2.values)
     print(vector2.shape)
 

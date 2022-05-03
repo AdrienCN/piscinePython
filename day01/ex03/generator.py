@@ -2,15 +2,16 @@ import sys
 import random
 import copy
 
+
 def check_input(text, option=None):
     error = 0
     if not isinstance(text, str):
         error = 1
     if option:
         if not isinstance(option, str):
-           error = 1 
-        if not (option == "shuffle" \
-                or option == "ordered" \
+            error = 1
+        if not (option == "shuffle"
+                or option == "ordered"
                 or option == "unique"):
             error = 1
         return (error)
