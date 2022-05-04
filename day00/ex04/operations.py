@@ -11,12 +11,18 @@ usageMsg = "Usage: python operations.py <number1> <number2> " +\
 if argCount != 2:
     if argCount > 2:
         print("InputError: too many arguments")
+    else:
+        print("InputError: Not enough arguments")
     print(usageMsg)
     exit()
 
 # Check arg format
 for item in args:
-    if not item.isdigit():
+    if item[0] == '-' or item[0] == '+':
+        item_tocheck = item[1:]
+    else:
+        item_tocheck = item
+    if not item_tocheck.isdigit():
         print("InputError: only numbers\n")
         print(usageMsg)
         exit()
