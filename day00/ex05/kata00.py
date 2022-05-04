@@ -1,4 +1,11 @@
 import sys
 
 t = (19, 42, 21)
-print('The 3 numbers are: {0}, {1}, {2}'.format(t[0], t[1], t[2]))
+print('The {} numbers are: '.format(len(t)), end="")
+
+j = 1
+for i in t:
+    print("{}".format(i), end="")
+    if j < len(t):
+        print(", ", end="")
+    j += 1

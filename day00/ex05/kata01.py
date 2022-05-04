@@ -5,5 +5,5 @@ languages = {
         'Ruby': 'Yukihiro Matsumoto',
         'PHP': 'Rasmus Lerdorf',
         }
-for key in languages:
-    print("{} was created by {}".format(key, languages[key]))
+for key, value in languages.items():
+    print("{} was created by {}".format(key, value))
