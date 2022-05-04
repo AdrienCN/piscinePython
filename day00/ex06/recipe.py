@@ -3,7 +3,10 @@ import string
 
 
 # Option addrecipe a faire
-cookbook = {}
+cookbook = {"sandwich":
+            {"ingredients": ["bread", "ham", "cheese", "tomatoes"],
+             "meal": "lunch",
+             "prep_time": 10}}
 
 
 def printRecipe(recipe_name):
@@ -37,6 +40,8 @@ def delRecipe(recipe_name):
 
 
 def printCookbook():
+    if len(cookbook) == 0:
+        print("Cookbook is empty")
     for recipe in cookbook:
         printRecipe(recipe)
 
@@ -50,9 +55,8 @@ def printMenu():
             5: Quit""")
 
 
-addRecipe("sandwich", ("bread", "ham", "cheese", "tomatoes"), "lunch", 10)
-addRecipe("cake", ("flour", "suger", "eggs"), "dessert", 60)
-addRecipe("salad", ("avocado", "arugula", "spinach", "tomatoes"), "lunch", 15)
+addRecipe("cake", ["flour", "suger", "eggs"], "dessert", 60)
+addRecipe("salad", ["avocado", "arugula", "spinach", "tomatoes"], "lunch", 15)
 
 option = 0
 while (option != 5):
@@ -73,7 +77,7 @@ while (option != 5):
             if prep_time.isdigit():
                 time = 1
             else:
-                print("prep_time must be a number")
+                print("prep_time must be a positive number")
         addRecipe(recipe_name, ingredient_list, meal, int(prep_time))
     elif option == "2":
         print("What recipe do you want to delete?")

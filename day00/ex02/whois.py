@@ -4,8 +4,13 @@ args = sys.argv
 argLen = len(sys.argv)
 
 assert argLen == 2, "Error usage: prog needs one argument"
-assert sys.argv[1].isdigit(), "Error argument must be an int"
-nb = int(sys.argv[1])
+nb = sys.argv[1]
+if nb[0] == '-' or nb[0] == '+':
+    nb_check = nb[1:]
+else:
+    nb_check = nb
+assert nb_check.isdigit(), "Error argument must be an int"
+nb = int(nb)
 
 if nb == 0:
     print("I'm Zero")
