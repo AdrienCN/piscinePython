@@ -5,7 +5,7 @@ args = sys.argv
 args.pop(0)
 # Ponctuation restante
 
-if len(args) != 2 or !args[1].isdigit():
+if len(args) != 2 or not args[1].isdigit():
     print("ERROR: usage <String To Filter> <Word Lenght Limit>")
     exit()
 

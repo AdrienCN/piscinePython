@@ -47,24 +47,8 @@ class Vector:
             while i < range_end:
                 self.values.append([float(i)])
                 i += 1
-        else:
-
-            # DEFAULT constructor
-            if isinstance(arg_one, list):
-                arg_list = arg_one
-                if not check_list(arg_list):
-                    raise ValueError("List constructor must be"
-                                     "floats and cannot be empty")
-                    self.values = arg_list
-                # Liste de Liste : COL
-                if isinstance(arg_list[0], list):
-                    self.shape = (len(arg_list), 1)
-                # List  : ROW
-            else:
-                self.shape = (1, len(arg_list))
-
             # SIZE constructor
-        else:
+        elif isinstance(arg_one, (int, float)):
             size = arg_one
             if not check_isnumber(size):
                 raise ValueError("Size constructor param error")
@@ -76,7 +60,20 @@ class Vector:
                 self.values.append([float(i)])
                 i += 1.0
             self.shape = (size, 1)
-
+        # DEFAULT constructor
+        else:
+            if isinstance(arg_one, list):
+                arg_list = arg_one
+                if not check_list(arg_list):
+                    raise ValueError("List constructor must be"
+                                     "floats and cannot be empty")
+                self.values = arg_list
+                # Liste de Liste : COL
+                if isinstance(arg_list[0], list):
+                    self.shape = (len(arg_list), 1)
+                # List  : ROW
+                else:
+                    self.shape = (1, len(arg_list))
     def __add__(self, other):
         if not isinstance(other, Vector):
             raise ValueError("Vector + ", type(other), " not available")
@@ -89,9 +86,9 @@ class Vector:
             for i in range(self.shape[1]):
                 tmp.append(self.values[i] + other.values[i])
         # COL add
-    else:
-        for i in range(self.shape[0]):
-            tmp.append([self.values[i][0] + other.values[i][0]])
+        else:
+            for i in range(self.shape[0]):
+                tmp.append([self.values[i][0] + other.values[i][0]])
         return Vector(tmp)
 
     def __radd__(self, other):

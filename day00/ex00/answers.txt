@@ -1,5 +1,14 @@
 pip list
 pip list -V
 pip show numpy
+
+# option 1 mais deprecated (https://stackoverflow.com/questions/17373473/how-do-i-search-for-an-available-python-package-using-pip)
+pip search tesseract
+
+# option 2 demande pip install pip_search
+pip_search tesseract
+
+#option 3
 conda search tesseract
+
 pip freeze > requirements.txt

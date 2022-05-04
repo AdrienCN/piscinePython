@@ -3,20 +3,20 @@ import sys
 args = sys.argv
 args.pop(0)
 argCount = len(args)
-usageMsg = """Usage: python operations.py <number1> <number2>
-                Example:
-                python operations.py 10 3"""
+usageMsg = "Usage: python operations.py <number1> <number2> " +\
+           "\nExample: " +\
+           "python operations.py 10 3"
 
 # Check arg count
 if argCount != 2:
     if argCount > 2:
-        print("InputError: too many arguments\n")
+        print("InputError: too many arguments")
     print(usageMsg)
     exit()
 
 # Check arg format
 for item in args:
-    if !item.isdigit():
+    if not item.isdigit():
         print("InputError: only numbers\n")
         print(usageMsg)
         exit()

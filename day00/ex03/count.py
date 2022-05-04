@@ -8,13 +8,14 @@ def text_analyser(*args):
     if len(args) > 1:
         print("ERROR")
         return
-
     text = ""
     if len(args) == 0:
         text = input("Enter your own text:\n")
     else:
         text = args[0]
-
+    if not isinstance(text, str):
+        print("ERROR")
+        return
     low = 0
     up = 0
     pun = 0
@@ -34,3 +35,12 @@ def text_analyser(*args):
     print("-Lowercases: ", low)
     print("-Spaces: ", space)
     print("-Punctuation: ", pun)
+
+
+# empty text
+text_analyser("")
+
+# no text
+text_analyser()
+
+text_analyser("un deux TROIS ---")

@@ -9,7 +9,7 @@ To exit, enter \"exit\"
 
 guess = "0"
 attempt = 1
-answer = random.randint(42, 42)
+answer = random.randint(1, 99)
 
 while 1:
     print("\n***Please enter a number between 1 and 99:***")
@@ -17,7 +17,7 @@ while 1:
     if guess == "exit":
         print("Thanks for playing. Goodbye")
         exit()
-    if !guess.isdigit():
+    if not guess.isdigit():
         print("This is not a number. Try again")
     elif int(guess) < answer:
         print("Too low !")

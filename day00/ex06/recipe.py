@@ -1,4 +1,5 @@
 import sys
+import string
 
 
 # Option addrecipe a faire
@@ -22,6 +23,8 @@ def printRecipe(recipe_name):
 def addRecipe(recipe_name, ingredients, meal, prep_time):
     cookbook[recipe_name] = {"ingredients": ingredients, "meal": meal,
                              "prep_time": prep_time}
+    print("New Recipe ADDED: ")
+    printRecipe(recipe_name)
 
 
 def delRecipe(recipe_name):
@@ -56,7 +59,22 @@ while (option != 5):
     printMenu()
     option = input()
     if option == "1":
-        print("Adding recipe work in progress ...")
+        recipe_name = input("Enter <Recipe_Name> : ")
+        ingredient = ""
+        ingredient_list = []
+        while ingredient != "stop":
+            ingredient = input("Enter an <ingredient>, "
+                               "to finish enter 'stop' :")
+            ingredient_list.append(ingredient)
+        meal = input("Enter <meal> : ")
+        time = 0
+        while time == 0:
+            prep_time = input("Enter preparation time: ")
+            if prep_time.isdigit():
+                time = 1
+            else:
+                print("prep_time must be a number")
+        addRecipe(recipe_name, ingredient_list, meal, int(prep_time))
     elif option == "2":
         print("What recipe do you want to delete?")
         todelete = input()
