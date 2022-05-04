@@ -32,7 +32,7 @@ def ft_progress(lst):
             eta = (remaining * (loopend - elapsed)) / j
         else:
             eta = 0
-        print("ETA: %6.2f [%3.2d%%][%s] %2d/%2d | Time elapsed : %.2f"
+        print("\rETA: %6.2f [%3.2d%%][%s] %2d/%2d | Time elapsed : %.2f"
               % (eta, equal * 10, arrow, j, range_size,  loopend - elapsed))
         yield j
 

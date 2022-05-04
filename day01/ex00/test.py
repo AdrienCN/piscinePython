@@ -4,7 +4,7 @@ from recipe import Recipe
 from book import Book
 
 recipe_one = Recipe("Soupe de Cresson",
-                    6,
+                    3,
                     15,
                     ["Eau", "Cresson", "Sel"],
                     "C'est pas tres bon la soupe de cresson",
@@ -24,6 +24,7 @@ recipe_three = Recipe("Glace",
                       "Une glace sans saveur au Lait",
                       "dessert")
 book = Book("Recette de Mamie")
+
 # Livre a son initialisation
 print(str(book))
 
@@ -42,8 +43,8 @@ print("\n****\t@All Starter :\t****")
 for i in book.get_recipes_by_types("starter"):
     print(str(i), "----", sep="\n")
 
-# print all lunch
-print("\n****\t@All Lunch :\t****")
+# ERROR CHECK
+print("\n****\tERROR CHECK (lunc instead of lunch) --> @All Lunch  :\t****")
 for i in book.get_recipes_by_types("lunc"):
     print(str(i), "----", sep="\n")
 
@@ -57,4 +58,6 @@ print("\nSearching recipe by name, enter a name:")
 name = input()
 book.get_recipe_by_name(name)
 
-print(str(book))
+# Check upate time change
+print("\n****Check update time *****")
+print(str(book), "\n")

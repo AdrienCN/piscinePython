@@ -21,16 +21,22 @@ class Martell(GotCharacter):
         print(self.house_words)
 
     def die(self):
-        self.is_alive = False if self.is_alive else True
+        self.is_alive = False
 
 
+print("****Test 1 : Empty mother class****")
 faceless = GotCharacter()
-print(faceless.__dict__)
+print(faceless.__doc__, "")
+print(faceless.__dict__, "\n")
 
+print("****Test 2 : GOTchar inheritance****")
 oberyn = Martell("Oberyn")
 print(oberyn.__doc__)
-print(oberyn.__dict__)
+print(oberyn.__dict__, "\n")
+
+print("****Test 3 :  methods ****")
 oberyn.print_house_words()
-print(oberyn.is_alive)
+print("Oberyn.is_alive = ", oberyn.is_alive)
+print("Oberyn.die()")
 oberyn.die()
-print(oberyn.is_alive)
+print("Oberyn.is_alive = ", oberyn.is_alive)
