@@ -1,22 +1,22 @@
 import sys
 import time
 
-lst = range(0, 11, 1)
-
 
 def ft_progress(lst):
-    start = 0
     eta = 0
-    elapsed = time.time()
-    bar = 0
-    range_size = max(lst)
+    start = time.time()
+    range_size = len(lst)
+    range_size = len(lst)
+    if range_size <= 0:
+        range_size = 1
+    k = 1
     for j in lst:
-        equal = (j / range_size) * 10
+        equal = (k / range_size) * 10
         space = 10 - equal
         tmp = 0
         arrow = ""
         # cree la fleche de chargement
-        while tmp < 11:
+        while tmp <= 10:
             if tmp <= equal:
                 arrow += "="
                 if tmp + 1 > equal:
@@ -26,16 +26,14 @@ def ft_progress(lst):
             tmp += 1
 
         # update time
-        remaining = range_size - j
+        remaining_item = max(lst) - abs(j)
         loopend = time.time()
         if j:
-            eta = (remaining * (loopend - elapsed)) / j
+            eta = abs(((remaining_item * (loopend - start)) / abs(j)))
         else:
             eta = 0
-        print("ETA: %6.2f [%3.2d%%][%s] %2d/%2d | Time elapsed : %.2f"
-              % (eta, equal * 10, arrow, j, range_size,  loopend - elapsed))
+        print("\rETA: %6.2f [%3.2d%%][%s] %2d/%2d | Time elapsed : %.2f"
+              % (eta, equal * 10, arrow, k,
+                 range_size, loopend - start), end="")
+        k += 1
         yield j
-
-
-for i in ft_progress(lst):
-    time.sleep(2)

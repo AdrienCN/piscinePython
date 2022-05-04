@@ -20,7 +20,7 @@ while 1:
     if not guess.isdigit():
         print("This is not a number. Try again")
     elif int(guess) < answer:
-        print("Too low !")
+        print("Too low ! | Attempt = ", attempt)
     elif int(guess) > answer:
         print("Too high")
     else:

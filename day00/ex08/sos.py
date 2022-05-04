@@ -23,7 +23,7 @@ for word in args:
         tmp = letter.upper()
         if tmp in code:
             res += code[tmp]
-        elif tmp != ' ':
+        else:
             print("Error %c is not alphanumeric" % tmp)
             exit()
     if i < len(args):
