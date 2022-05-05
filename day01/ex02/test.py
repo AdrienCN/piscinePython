@@ -2,7 +2,7 @@ from vector import Vector
 
 # Tests des constructeurs
 try:
-    print("\n-------------> INT CONSTRUCTEUR")
+    print("\n-------------> SIZE CONSTRUCTEUR")
     vector1 = Vector(3)
     print(vector1.values)
     print(vector1.shape)
@@ -17,7 +17,6 @@ try:
     print(vector3.values)
     print(vector3.shape)
     ex3 = vector3 * 5
-    print(ex3.values)
     ex33 = ex3 - vector3
     print(ex33.values)
     ex66 = ex3 + vector3
@@ -35,6 +34,7 @@ try:
     print(ex444.values)
     ex4444 = ex444.T()
     print(ex4444.values)
+    # equivalent a ex4444 * ex33
     ex44444 = ex4444.dot(ex33)
     print(ex44444.values)
 

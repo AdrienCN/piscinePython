@@ -40,9 +40,9 @@ class Vector:
             if not check_isnumber(range_start, range_end):
                 raise ValueError("Range constructor param error")
             i = range_start
-            self.shape = range_end - range_start
+            self.shape = ((range_end - range_start), 1)
             self.values = []
-            if not self.shape >= 0:
+            if not self.shape[0] >= 0:
                 raise ValueError("Init range must be >= 0")
             while i < range_end:
                 self.values.append([float(i)])
@@ -74,6 +74,7 @@ class Vector:
                 # List  : ROW
                 else:
                     self.shape = (1, len(arg_list))
+
     def __add__(self, other):
         if not isinstance(other, Vector):
             raise ValueError("Vector + ", type(other), " not available")

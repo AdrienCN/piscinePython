@@ -3,22 +3,23 @@ import random
 import copy
 
 
-def check_input(text, option=None):
-    error = 0
-    if not isinstance(text, str):
-        error = 1
+def check_input(text, sep, option):
+    if not isinstance(text, str)\
+        or not isinstance(sep, str)\
+            or not isinstance(option, str):
+        return -1
+    if len(sep) == 0:
+        return -1
     if option:
-        if not isinstance(option, str):
-            error = 1
-        if not (option == "shuffle"
-                or option == "ordered"
-                or option == "unique"):
-            error = 1
-        return (error)
+        if (option != "shuffle"
+            and option != "ordered"
+                and option != "unique"):
+            return -1
+    return (0)
 
 
 def generator(text, sep=" ", option=None):
-    if check_input(text, option):
+    if check_input(text, sep, option):
         print("ERROR")
         exit()
 
