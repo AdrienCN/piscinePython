@@ -21,12 +21,24 @@ class Bank(object):
         self.account = []
 
     def add(self, account):
-        print("--ADD ACCOUNT--")
-        if self.check_account_safety(account):
+        if isinstance(account, Account):
             self.account.append(account)
-            print("--Account ADDED--\n")
+            print("--Account [{}] ADDED--\n".format(account.name))
         else:
             print("--NO Account ADDED--\n")
+
+    def find_account(self, account_identifier):
+        for client in self.account:
+            if isinstance(account_identifier, int):
+                if client.id == account_identifier:
+                    return client
+            elif isinstance(account_identifier, str):
+                if client.name == account_identifier:
+                    return client
+            else:
+                print("Error: Find_account :must be int or str")
+                break
+        return None
 
     def transfer(self, origin, dest, amount):
         """
@@ -36,30 +48,37 @@ class Bank(object):
         @return:    True if success, False if an error occured
         """
         print("--Transfer Processing--")
-        ret = True
+        client_origin = self.find_account(origin)
+        client_dest = self.find_account(dest)
+        if not client_origin:
+            print("--Transfer Aborted : {} could not be found--"
+                  .format(origin))
+            return False
+        if not client_dest:
+            print("--Transfer Aborted : {} could not be found--"
+                  .format(dest))
+            return False
         if not isinstance(amount, float):
-            print("\tError : amount must int or float")
-            ret = False
+            print("--Transfer Aborted : amount must int or float--")
+            return False
         if amount < 0:
-            print("\tError: Amount must be > 0")
-            ret = False
-        if not self.check_account_safety(origin):
-            print("\tError: Origin account is corrupted")
-            ret = False
-        if not self.check_account_safety(dest):
-            print("\tError: Dest account is corrupted")
-            ret = False
+            print("--Transfer Aborted: Amount must be > 0--")
+            return False
+        if self.is_corrupted(client_origin):
+            print("--Transfer Aborted: Origin account is corrupted--")
+            return False
+        if self.is_corrupted(client_dest):
+            print("--Transfer Aborted: Dest account is corrupted--")
+            return False
 
-        if amount > float(origin.value):
-            print("\tError : Sender has insufficient fund for the transfer")
-            ret = False
-        if ret:
-            origin.transfer(-amount)
-            dest.transfer(amount)
-            print("--Transfer Completed--\n")
-        else:
-            print("--Transfer Aborted--\n")
-        return ret
+        if amount > float(client_origin.value):
+            print("\tTransfer Aborted : insufficient fund")
+            return False
+        client_origin.transfer(-amount)
+        client_dest.transfer(amount)
+        print("--Transfer from {} to {} Completed--\n"
+              .format(client_origin.name, client_dest.name))
+        return True
 
     def fix_account(self, account):
         """
@@ -68,48 +87,33 @@ class Bank(object):
             @return True if sucess, False if an error occured
         """
         print("--Fixing Account--")
-        ret = False
-        if not isinstance(account, Account):
-            print("\tError : object is not of type <Account>\n")
+        client_to_fix = self.find_account(account)
+        if not client_to_fix:
+            print("Error : {} could not be found".format(account))
             return False
-        if not hasattr(account, "name"):
-            account.name = "default_name"
-        if not hasattr(account, "id"):
+        if not hasattr(client_to_fix, "name"):
+            client_to_fix.name = "default_name"
+        if not hasattr(client_to_fix, "id"):
             Accounnt.ID_COUNT += 1
-            account.id = Account.ID_COUNT
-        if not hasattr(account, "value"):
-            setattr(account, "value", 0)
-            account.transfer(0)
+            client_to_fix.id = Account.ID_COUNT
+        if not hasattr(client_to_fix, "value"):
+            setattr(client_to_fix, "value", 0)
+            client_to_fix.transfer(0)
 
-        attr_dict = account.__dict__
+        attr_dict = client_to_fix.__dict__
         zip_addr = 0
         for attr_name in attr_dict:
             if attr_name.find("zip") == 0 or attr_name.find("addr") == 0:
                 zip_addr = 1
             elif attr_name[0] == "b":
-                setattr(account, "_" + attr_name, attr_dict[attr_name])
-                delattr(account, attr_name)
+                setattr(client_to_fix, "_" + attr_name, attr_dict[attr_name])
+                delattr(client_to_fix, attr_name)
         if not zip_addr:
-            setattr(account, "zipcode", "75001")
+            setattr(client_to_fix, "zipcode", "75001")
 
-        if len(dir(account)) % 2 == 0:
-            account._dummyattribute = "dummyattribute"
+        if len(dir(client_to_fix)) % 2 == 0:
+            client_to_fix._dummyattribute = "dummyattribute"
         print("--Account fixed--")
-        return False
-
-    def check_account_safety(self, account):
-        """
-            Checks full Account safety
-            If not safe, tries to fix it
-            True Account is safe or has been fixed, False corrupted
-        """
-        print("\t****Cheking Account Safety****")
-        if not isinstance(account, Account):
-            print("\tError : object is not of type <Account>\n")
-            return False
-        if self.is_corrupted(account):
-            return False
-        print("\t****Account Safe****")
         return True
 
     def is_corrupted(self, account):

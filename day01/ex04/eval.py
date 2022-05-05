@@ -23,7 +23,7 @@ class Evaluator:
         if not check_input(coefs, words):
             return -1
         res = 0
-        j = 0
+        # tup[0] = index | tup[1] = valeur de l'iterateur
         for tup in enumerate(words):
             res += len(tup[1]) * coefs[tup[0]]
         return res
@@ -42,6 +42,8 @@ class Evaluator:
 words = ["Le", "Lorem", "Ipsum", "est", "simple"]
 coefs = [1.0, 2.0, 1.0, 4.0, 5.0]
 
-print("Zip: ", Evaluator.zip_evaluate(coefs, words))
-print("\n********\n")
-print("Enumerate: ", Evaluator.enumerate_evaluate(coefs, words))
+print("Word = ", words)
+print("Coef = ", coefs, "\n")
+print("ZIP : ", Evaluator.zip_evaluate(coefs, words))
+print("\t********")
+print("ENUMERATE : ", Evaluator.enumerate_evaluate(coefs, words))
