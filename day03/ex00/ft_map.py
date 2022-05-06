@@ -50,6 +50,8 @@ bar = (1, 2, 3, 4, 5)
 # baz = ["S", "A", "L", "U", "T"]
 # baz = ("S")
 
+print("foo : ", foo, " | next(iter(foo))", next(iter(foo)))
+
 try:
     print("\t\t***MAP***")
     print("Mine : ", list(ft_map(map_test, foo)))
