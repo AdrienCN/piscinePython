@@ -1,6 +1,7 @@
 import sys
 import time
 
+
 def progressbar(lst):
     eta = 0
     start = time.time()

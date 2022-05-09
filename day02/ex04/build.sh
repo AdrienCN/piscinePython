@@ -2,10 +2,10 @@
 
 # install required packages
 
-pip install pip
-pip install setuptools
-pip install wheel
-pip install build
+pip install --upgrade pip
+pip install --upgrade setuptools
+pip install --upgrade wheel
+pip install --upgrade build
 
 python3 -m build
 

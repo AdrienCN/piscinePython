@@ -1,9 +1,10 @@
 import setuptools
 
+
 setuptools.setup(
     name="my_minipack",
     version="1.0.0",
-    summary = "How to create a package in python",
+    summary="How to create a package in python",
     author="adconsta",
     author_email="adconsta@example.com",
     classifiers=[
