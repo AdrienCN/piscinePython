@@ -3,6 +3,9 @@ import random
 
 
 class NumPyCreator:
+    
+    def __init__(self):
+        pass
 
     def from_list(self, lst):
         np_arr = None
