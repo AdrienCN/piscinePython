@@ -10,32 +10,26 @@ class ColorFilter:
     def invert(self, array):
         if not isinstance(array, np.ndarray):
             return None
-        invert_arr = 1 - array[:, :, :3]
-        return invert_arr
+        return 1 - array[:, :, :3]
 
     def to_blue(self, array):
         if not isinstance(array, np.ndarray):
             return None
-        blue_arr = np.zeros(array.shape)
-        blue_arr[..., 2:4] = array[..., 2:4]
+        blue_arr = np.zeros((array.shape[0], array.shape[1], 3))
+        blue_arr[..., 2:3] = array[..., 2:3]
         return blue_arr
 
     def to_green(self, array):
         if not isinstance(array, np.ndarray):
             return None
-        green_arr = array[...]
-        green_arr = [0, 1, 0, 1] * green_arr[..., :4]
-        return green_arr
+        return [0, 1, 0] * array[..., :3]
 
     def to_red(self, array):
         if not isinstance(array, np.ndarray):
             return None
         green = self.to_green(array)
         blue = self.to_blue(array)
-        red_arr = array[...]
-        red_arr[..., 1:2] -= green[..., 1:2]
-        red_arr[..., 2:3] -= blue[..., 2:3]
-        return red_arr
+        return array[..., 0:3] - (green[..., 0:3] + blue[..., 0:3])
 
     def to_grayscale(self, array, filter, **kwargs):
         gray_arr = None
@@ -46,74 +40,65 @@ class ColorFilter:
             and filter != "mean" and filter != "m"):
             return None
         if (filter == "mean" or filter == "m"):
-            gray_arr = array[...]
-            gray_arr[..., 0:3] = (gray_arr[..., 0:1] * 0.299\
-                                  + gray_arr[..., 1:2] * 0.587\
-                                  + gray_arr[..., 2:3] * 0.114)\
-                                  / 3
+            gray_arr = np.tile(array, 1)
+            gray_arr[..., 0:1] = gray_arr[..., 0:1] * 0.299
+            gray_arr[..., 1:2] = gray_arr[..., 1:2] * 0.587
+            gray_arr[..., 2:3] = gray_arr[..., 2:3] * 0.114
             return gray_arr
         else:
             if len(kwargs) != 3 :
                 return None
             lst = list(kwargs.values())
-            print("List : ", lst)
             if not all(isinstance(x, float) for x in lst):
                 return None
-            print(sum(lst))
             if sum(lst) != 1:
-                print("sum is not 1")
                 return None
-            gray_arr = array[...]
-            gray_arr[..., 0:3] = (gray_arr[..., 0:1] * lst[0]\
-                                  + gray_arr[..., 1:2] * lst[1]\
-                                  + gray_arr[..., 2:3] * lst[2])\
-                                  / 3
-
+            gray_arr = np.tile(array, 1)
+            gray_arr[..., 0:1] = gray_arr[..., 0:1] * lst[0]
+            gray_arr[..., 1:2] = gray_arr[..., 1:2] * lst[1]
+            gray_arr[..., 2:3] = gray_arr[..., 2:3] * lst[2]
             return gray_arr
 
 imp = ImageProcessor()
 arr = imp.load("elon.png")
 cf = ColorFilter()
 
+"""
 # Original Img
-#pyplot.imshow(arr)
-#pyplot.show()
+imp.display(arr)
 
 # Inverted Img
-"""
+
 invert_arr = cf.invert(arr)
-pyplot.imshow(blue_arr)
-pyplot.show()
-"""
+imp.display(invert_arr)
+imp.display(arr)
+
 
 # Blue Filter
-"""
 blue_arr = cf.to_blue(arr)
-pyplot.imshow(blue_arr)
-pyplot.show()
-"""
+imp.display(blue_arr)
+imp.display(arr)
 
 # Green Filter
-"""
 green_arr = cf.to_green(arr)
-pyplot.imshow(green_arr)
-pyplot.show()
-"""
+imp.display(green_arr)
+imp.display(arr)
 
 # Red Filter
-"""
 red_arr = cf.to_red(arr)
-pyplot.imshow(red_arr)
-pyplot.show()
+imp.display(red_arr)
+imp.display(arr)
 """
 # Gray
-"""
 gray_arr = cf.to_grayscale(arr, "m", a=0.299, b=0.587, c=0.114)
-pyplot.imshow(gray_arr)
-pyplot.show()
-"""
+imp.display(gray_arr)
+imp.display(arr)
 
-gray_arr = cf.to_grayscale(arr, "w", a=0.4, b=0.6, c=0.0)
-pyplot.imshow(gray_arr)
-pyplot.show()
+gray_arr = cf.to_grayscale(arr, "w", a=0.0, b=0.0, c=1.0)
+imp.display(gray_arr)
+imp.display(arr)
+
+gray_arr = cf.to_grayscale(arr, "w", a=1.0, b=0.0, c=0.0)
+imp.display(gray_arr)
+imp.display(arr)
 

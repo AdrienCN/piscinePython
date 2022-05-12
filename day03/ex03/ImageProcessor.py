@@ -19,7 +19,7 @@ class ImageProcessor:
 
     def display(self, array):
         try:
-            pyplot.imshow(arr)
+            pyplot.imshow(array)
             pyplot.show()
         except Exception as msg:
             print("Error Display :\n", msg)
