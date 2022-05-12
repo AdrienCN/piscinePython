@@ -40,22 +40,15 @@ class ColorFilter:
             and filter != "mean" and filter != "m"):
             return None
         if (filter == "mean" or filter == "m"):
-           
-            test = np.sum([2, 3, 4])
-            print("Test: ", test)
             gray_arr = np.tile(array[..., 0:3], 1)
-            gray_arr[:, :, 0:1] = np.sum([0.299 * array[..., 0:1],\
-                                  0.587 * array[..., 1:2],\
-                                  0.114 * array[..., 2:3]])
-
-            gray_arr[:, :, 1:2] = np.sum([0.299 * array[..., 0:1],\
-                                  0.587 * array[..., 1:2],\
-                                  0.114 * array[..., 2:3]])
-
-            gray_arr[:, :, 2:3] = np.sum([0.299 * array[..., 0:1],\
-                                  0.587 * array[..., 1:2],\
-                                  0.114 * array[..., 2:3]])
-
+            gray_arr[:, :, 0:1] = 0.299 * array[..., 0:1]
+            gray_arr[:, :, 1:2] = 0.587 * array[..., 1:2]
+            gray_arr[:, :, 2:3] = 0.114 * array[..., 2:3]
+            print("Arr : ", gray_arr[2,0,0:3])
+            print("SUM :", np.sum(gray_arr[..., 0:3]))
+            gray_arr[..., 0:1] = np.sum(gray_arr[..., 0:3]) / 3
+            gray_arr[..., 1:2] = np.sum(gray_arr[..., 0:3]) / 3
+            gray_arr[..., 2:3] = np.sum(gray_arr[..., 0:3]) / 3
             return gray_arr
         else:
             if len(kwargs) != 3 :
