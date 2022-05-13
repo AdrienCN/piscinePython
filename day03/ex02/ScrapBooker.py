@@ -12,8 +12,8 @@ def crop_var_check(array, dim, position):
         and all(x >= 0 for x in position)\
         and position[0] <= array.shape[0]\
         and position[1] <= array.shape[1]\
-        and array.shape[0] - position[0] <= dim[0]\
-            and array.shape[1] - position[1] <= dim[1]:
+        and array.shape[0] - position[0] > dim[0]\
+            and array.shape[1] - position[1] > dim[1]:
         return 1
     return 0
 
@@ -52,7 +52,8 @@ class ScrapBooker:
     def crop(self, array, dim, position=(0, 0)):
         cropped_arr = None
         if crop_var_check(array, dim, position):
-            cropped_arr = array[position[0]:dim[0], position[1]:dim[1]]
+            cropped_arr = array[position[0]:dim[0] + position[0],
+                                position[1]:dim[1] + position[1]]
         return cropped_arr
 
     def thin(self, array, n, axis):
@@ -93,7 +94,7 @@ sb = ScrapBooker()
 arr = np.arange(0, 25).reshape(5, 5)
 print("CROP:")
 print(arr)
-print("crop((3, 1), (1, 0)):")
+print("New height 3, New Width 1")
 print(sb.crop(arr, (3, 1), (1, 0)))
 print("\t-------------------")
 
