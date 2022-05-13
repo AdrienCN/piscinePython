@@ -14,7 +14,6 @@ def crop_var_check(array, dim, position):
         and position[1] <= array.shape[1]\
         and array.shape[0] - position[0] <= dim[0]\
             and array.shape[1] - position[1] <= dim[1]:
-        print("Review crop error check1")
         return 1
     return 0
 
@@ -51,10 +50,10 @@ class ScrapBooker:
         pass
 
     def crop(self, array, dim, position=(0, 0)):
+        cropped_arr = None
         if crop_var_check(array, dim, position):
             cropped_arr = array[position[0]:dim[0], position[1]:dim[1]]
-            return cropped_arr
-        return None
+        return cropped_arr
 
     def thin(self, array, n, axis):
         if thin_var_check(array, n, axis):
@@ -92,20 +91,42 @@ sb = ScrapBooker()
 
 # CROP
 arr = np.arange(0, 25).reshape(5, 5)
-sb.crop(arr, (3, 1), (1, 0))
+print("CROP:")
+print(arr)
+print("crop((3, 1), (1, 0)):")
+print(sb.crop(arr, (3, 1), (1, 0)))
+print("\t-------------------")
 
 # THIN
-arr3 = np.array([[var] * 10 for var in "ABCDEFG"])
-sb.thin(arr3, 3, 1)
-
+print("THIN:")
 arr2 = np.array("A B C D E F G H I".split() * 6).reshape(-1, 9)
-sb.thin(arr2, 3, 0)
+print(arr2, "\n")
+print("Delete every 3rd line on VERTICAL")
+print(sb.thin(arr2, 3, 0), "\n")
+
+arr3 = np.array([[var] * 10 for var in "ABCDEFG"])
+print(arr3, "\n")
+print("Delete every 3rd line on HORIZONTAL")
+print(sb.thin(arr3, 3, 1))
+print("\t-------------------")
+
 
 # JUXTAPOSE
+print("JUXTAPOSE")
 arr4 = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-sb.juxtapose(arr4, 0, 0)
+print(arr4)
+print("Juxtapose(0, 0)")
+print(sb.juxtapose(arr4, 0, 0))
+print("Juxtapose(2, 0)")
+print(sb.juxtapose(arr4, 2, 0))
+print("\t-------------------")
 
-sb.mosaic(arr4, (2, 3))
+# MOSAIC
+print("MOSAIC")
+print(arr4)
+print("mosaic(2, 3)")
+print(sb.mosaic(arr4, (2, 3)))
+print("\t-------------------")
 
 print("ERROR CHECK NOTHING SHOULD APPEAR")
 not_numpy_arr = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
