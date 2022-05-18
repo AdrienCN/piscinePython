@@ -75,6 +75,7 @@ class KmeansClustering:
         for i in range(self.ncentroid):
             print("Centroid [{}] : \n- coordinate {}\n- individuals {}.\n"
                   .format(i, self.centroids[i], len(self.clusters[i])))
+        """
         #get max height
         if (self.ncentroid == 4):
             belt = max(x[0] for x in self.centroids)
@@ -82,12 +83,10 @@ class KmeansClustering:
                 if belt in self.centroids[i]:
                     belt = i
                     print("belt = ", i)
-            earth = []
-            venus = []
-            mars = []
             tmp = copy.deepcopy(self.centroids)
             del tmp[belt: belt + 1]
-
+            mars = max(x[0] for x in self.centroids)
+            
             #max_h = Mars ou Venus
             max_h = max(x[0] for x in tmp)
             
@@ -127,7 +126,7 @@ class KmeansClustering:
                   "-Venus  : K[{}] : val {}  : people {} \n"
                   .format(venus, self.centroids[venus], individual[venus]),
                   "Total individual : {}".format(sum([x for x in individual])))
-        
+        """
 
 
     
