@@ -97,35 +97,43 @@ class KmeansClustering:
                 elif belt in self.centroids[i]:
                     belt = i
 
-            print("Belt {}, Earth {} | tmp :".format(belt, earth))
-            venus = -1
-            mars = -1
-            for i in range(len(self.centroids)):
-                if i == belt or i == earth:
-                    pass
-                else:
-                    if venus == -1:
-                        venus = i
-                    else:
-                        mars = i
-
-            if self.centroids[venus][0] > self.centroids[earth][0]\
-                and self.centroids[venus][1] < self.centroids[earth][1]:
-                    pass
+            tmp = copy.deepcopy(self.centroids)
+            print("Belt {}, Earth {}".format(belt, earth))
+            del tmp[belt: belt + 1]
+            del tmp[earth:earth + 1]
+            if tmp[0][0] > self.centroids[earth][0] and tmp[0][1] < self.centroids[earth][1]:
+                venus = tmp[0]
+                mars = tmp[1]
             else:
-                tmp = mars
-                mars = venus
-                venus = tmp
+                venus = tmp[1]
+                mars = tmp[0]
+            for i in range(len(self.centroids)):
+                if venus in self.centroids[i]:
+                    venus = i
+                elif mars in self.centroids[i]:
+                    mars = i
+            print("\nmars : {} | earth {} | venus {} | belt {}\n".format(mars, earth, venus, belt))
+            for i in range(len(self.centroids)):
+                print("centroid[{}] = {}".format(i, self.centroids[i]))
+                if belt  == self.centroids[i][0]:
+                    belt = i
+                elif mars == self.centroids[i][1]:
+                    mars = i
+                elif venus == self.centroids[i][1]:
+                    venus = i
+                else:
+                    earth = i
             print("\nmars : {} | earth {} | venus {} | belt {}\n".format(mars, earth, venus, belt))
 
-            print(" -Mars   : K[{}] : val {}  : {}\n"
-                  .format(mars, self.centroids[mars], len(self.clusters[mars])),
-                  "-Belt   : K[{}] : val {}   : {}\n"
-                  .format(belt, self.centroids[belt], len(self.clusters[belt])),
-                  "-Earth  : K[{}] : val {}   : {}\n"
-                  .format(earth, self.centroids[earth], len(self.clusters[earth])),
-                  "-Venus  : K[{}] : val {}   : {}\n"
-                  .format(venus, self.centroids[venus], len(self.clusters[venus])))
+            print(" -Mars   : K[{}] : val {}  \n"
+                  .format(mars, self.centroids[mars]),
+                  "-Belt   : K[{}] : val {}   \n"
+                  .format(belt, self.centroids[belt]),
+                  "-Earth  : K[{}] : val {}   \n"
+                  .format(earth, self.centroids[earth]),
+                  "-Venus  : K[{}] : val {}   \n"
+                  .format(venus, self.centroids[venus]))
+
     
     def centroids_are_equal(self, cluster_mean, centroids):
         for i in range(self.ncentroid):
@@ -245,7 +253,7 @@ try :
         data_arr = np.delete(data_arr, 0, 1)
         k = KmeansClustering(max_iter, ncentroid)
         k.fit(data_arr)
-        plot_res_3d(data_arr, k)
+        #plot_res_3d(data_arr, k)
 except Exception as msg:
     print("Error : ", msg)
     exit(1)
