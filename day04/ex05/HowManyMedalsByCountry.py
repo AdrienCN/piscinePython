@@ -12,7 +12,7 @@ def howManyMedalsByCountry(data, name):
     df = df.sort_values('Year')
     df.dropna(inplace=True)
     #df = pd.concat([male_df, female_df])
-    print(df)
+print(df)
     year_list = df['Year'].drop_duplicates().to_list()
     for year in year_list:
         dico[year] = {'G':0, 'S':0, 'B':0}
@@ -51,12 +51,27 @@ def howManyMedalsByCountry(data, country):
     df = data.loc[(data['Team'] == country)]
     df = df.sort_values('Year')
     df.dropna(inplace=True)
-    df = df[['Year', 'Sex', 'Sport', 'Event','Medal']]
-    df_team = df.loc
+    df = df[['Year', 'Sex', 'Sport','Medal', 'Event']]
+    df_team = df.loc[(df['Sport'].isin(team_sports))]
+    df_indiv = df.loc[~(df['Sport'].isin(team_sports))]
     year_list = df['Year'].drop_duplicates().to_list()
     for year in year_list:
-        dico
-    return {}
+        df_team_year = df_team.loc[(df_team['Year'] == year)].drop_duplicates('Event')
+        df_indiv_year = df_indiv.loc[(df_indiv['Year'] == year)]
+        df_medal_total = pd.concat([df_team_year, df_indiv_year])
+        print("Year {} Team :\n{}".format(year, df_team_year)) 
+        print("Year {} Indiv :\n{}".format(year, df_indiv_year)) 
+        print("\t*****\nMedal total :\n", df_medal_total)
+        medal_list = df_medal_total['Medal'].to_list()
+        dico[year] = {'G':0, 'S':0, 'B':0}
+        for medal in medal_list:
+            if medal == 'Gold':
+                dico[year]['G'] += 1
+            elif medal == 'Silver':
+                dico[year]['S'] += 1
+            elif medal == 'Bronze':
+                dico[year]['B'] += 1
+    return dico
 
 loader = FileLoader()
 data = loader.load("athlete_events.csv")
