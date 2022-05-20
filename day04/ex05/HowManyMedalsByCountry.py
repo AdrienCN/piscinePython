@@ -1,21 +1,30 @@
 from FileLoader import FileLoader
+import pandas as pd
 import sys
 
 def howManyMedalsByCountry(data, name):
     # Get all row where name == name
     df = data.loc[data['Team'] == name]
-    print(df)
-    df = df[['Year', 'Team', 'Event', 'Medal']]
+    df = df[['Year', 'Sex', 'Event', 'Medal']]
     print(df)
     dico = {}
-    df_year = df['Event'].drop_duplicates()
-    print(df_year)
-    """
-    year_list = df_year.to_list()
+    df = df.sort_values('Year')
+    male_df = df.loc[(df['Sex'] == 'M')]
+    female_df = df.loc[(df['Sex'] == 'F')]
+    male_df = male_df.drop_duplicates('Event')
+    female_df = female_df.drop_duplicates('Event')
+    print(male_df)
+    print(female_df)
+    df = pd.concat([male_df, female_df])
+    print(df)
+    year_list = df['Year']
+    year_list = year_list.drop_duplicates().to_list()
+    print(year_list)
     for year in year_list:
         dico[year] = {'G':0, 'S':0, 'B':0}
-        medal_list = df.loc[(df['Year'] == year)]
-        medal_list = medal_list['Medal'].to_list()
+        medal_df = df.loc[(df['Year'] == year)]
+        #print(medal_df)
+        medal_list = medal_df['Medal'].to_list()
         for medal in medal_list:
             if medal == 'Gold':
                 dico[year]['G'] += 1
@@ -23,7 +32,6 @@ def howManyMedalsByCountry(data, name):
                 dico[year]['S'] += 1
             elif medal == 'Bronze':
                 dico[year]['B'] += 1
-    """
     return dico
 
 loader = FileLoader()
