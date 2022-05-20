@@ -30,6 +30,10 @@ def get_distance(data_point, centroids, min_list, max_list):
         x_norm_2 = (centroids[i][0] - min_list[0]) / x_range
         y_norm_2 = (centroids[i][1] - min_list[1]) / y_range
         z_norm_2 = (centroids[i][2] - min_list[2]) / z_range
+        #dst = (abs(x_norm_1 - x_norm_2) +
+        #       abs(y_norm_1 - y_norm_2) +
+        #       abs(z_norm_1 - z_norm_2))
+        
         dst = np.square((x_norm_1 - x_norm_2)**2 +
                         (y_norm_1 - y_norm_2)**2 +
                         (z_norm_1 - z_norm_2)**2)
@@ -48,7 +52,8 @@ def     get_mean(cluster, X):
     z = 0.0
     c_len = len(cluster)
     if c_len == 0:
-        return [0, 0, 0]
+        index = random.randint(0,X.shape[0] - 1)
+        return X[index]
     for i in range(c_len):
         x += X[cluster[i]][0]
         y += X[cluster[i]][1]
@@ -66,6 +71,38 @@ class KmeansClustering:
         self.centroids = [] # centroids values
         self.clusters = [[] for i in range(self.ncentroid)]
         
+     
+    def fit(self, X):
+        self.min_list = np.amin(X, 0)
+        self.max_list = np.amax(X, 0)
+        # Get centroids random value from within dataset
+        for i in range(self.ncentroid):
+            index = random.randint(0, X.shape[0] - 1)
+            self.centroids.append(X[index].tolist())
+        for i in range(self.max_iter):
+            #for j in range(self.ncentroid):
+                #print("Round {} centroid {} : {}".format(i, j, self.centroids[j]))
+            data_arr = self.predict(X)
+            cluster_mean = self.get_clusters_means(data_arr, X)
+            if self.centroids_are_equal(cluster_mean, self.centroids):
+                self.display_result()
+                return
+            self.centroids.clear()
+            self.centroids = copy.deepcopy(cluster_mean)
+        self.display_result()
+        return
+
+    def predict(self, X):
+        predict = np.zeros((X.shape[0], 1))
+        # Passer dans chaque ligne
+        for i in range(X.shape[0]):
+            predict[i] = get_distance(X[i], self.centroids,
+                                      self.min_list, self.max_list)
+        count = [0, 0, 0, 0]
+        for i in range(predict.shape[0]):
+            count[int(predict[i][0])] += 1
+        return predict
+
     def get_clusters_means(self, data_arr, X):
         self.clusters.clear()
         self.clusters= [[] for i in range(self.ncentroid)]
@@ -73,9 +110,7 @@ class KmeansClustering:
         for i in range(data_arr.shape[0]):
             self.clusters[int(data_arr[i][0])].append(i)
             #edge case cluster is empty after update
-
         means = [[] for i in range(self.ncentroid)]
-        #print("\t***************************")
         for i in range(self.ncentroid):
             means[i] = get_mean(self.clusters[i], X)
             #print("cluster{}\n-len : {}\n-Means : {}\n {}\n".format(i, len(self.clusters[i]), means[i], self.clusters[i]))
@@ -131,76 +166,9 @@ class KmeansClustering:
         for i in range(self.ncentroid):
             tmp = list(centroids[i])
             if cluster_mean[i] != tmp:
-                print("Cluster{} and centroid{} are different".format(i, i))
                 return 0
         print("All centroids are equal : RETURNNG")
         return 1
-    
-    def fit(self, X):
-        self.min_list = np.amin(X, 0)
-        self.max_list = np.amax(X, 0)
-        # Get centroids random value from within dataset
-        for i in range(self.ncentroid):
-            index = random.randint(0, X.shape[0] - 1)
-            self.centroids.append(X[index].tolist())
-        print("First centroid : ", self.centroids)
-        for i in range(self.max_iter):
-            #for j in range(self.ncentroid):
-                #print("Round {} centroid {} : {}".format(i, j, self.centroids[j]))
-            data_arr = self.predict(X)
-            cluster_mean = self.get_clusters_means(data_arr, X)
-            if self.centroids_are_equal(cluster_mean, self.centroids):
-                self.display_result()
-                return
-            self.centroids.clear()
-            self.centroids = copy.deepcopy(cluster_mean)
-        
-        # Update centroid position 
-        #for i in range(self.max_iter):
-        # Create cluster that will be filled with closest datapoint
-            # check si on a trouve le cluster optimum
-            #if (centroids == cluster_predict):
-            #    break
-            #self.centroids.clear()
-            #self.centroids = cluster_predict
-        self.display_result()
-        return
-
-    def predict(self, X):
-        predict = np.zeros((X.shape[0], 1))
-        
-        # Passer dans chaque ligne
-        for i in range(X.shape[0]):
-            #calculer la distance entre ce point et les 4 centroids
-            # retourner l'index du centroids le + proche
-            """
-            index_closest_centroid = get_distance(X[i], self.centroids)
-            clusters[index_closest_centroid].append(i)
-            """
-            predict[i] = get_distance(X[i], self.centroids,
-                                      self.min_list, self.max_list)
-        count = [0, 0, 0, 0]
-        for i in range(predict.shape[0]):
-            count[int(predict[i][0])] += 1;
-        #for i in range(len(count)):
-            #print("cluster[{}] : {}".format(i, count[i]))
-        # Calculer la mean value pour chaque centroid et replacer les centroids value par cela
-        """
-        new_centroids = []
-        for i in range(self.ncentroid):
-            print("Cluster_mean : ", i)
-            new_centroids[i] = get_mean(clusters[i], X)
-    
-        for i in range(len(new_centroids)):
-            print("old i = {} : {}\n".format(i ,self.centroids[i]))
-            print("new i = {} : {}\n\n".format(i ,new_centroids[i]))
-        np_centroids = np.zeros((self.ncentroids
-        """
-        return predict
-
-        
-        
-
 
 def plot_res_3d(X, kmeans):
     
@@ -245,7 +213,7 @@ try :
         data_arr = np.delete(data_arr, 0, 1)
         k = KmeansClustering(max_iter, ncentroid)
         k.fit(data_arr)
-        plot_res_3d(data_arr, k)
+        #plot_res_3d(data_arr, k)
 except Exception as msg:
     print("Error : ", msg)
     exit(1)
