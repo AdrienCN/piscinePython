@@ -2,6 +2,7 @@ from matplotlib import image
 from matplotlib import pyplot
 import numpy as np
 
+
 class ImageProcessor:
     def __init__(self):
         pass

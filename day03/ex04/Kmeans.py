@@ -16,6 +16,7 @@ def check_params(ncentroid, max_iter):
         return 0
     return 1
 
+
 def get_distance(data_point, centroids, min_list, max_list):
     # Pour chaque centroid
     distance = []
@@ -38,14 +39,15 @@ def get_distance(data_point, centroids, min_list, max_list):
             ret = i
     return ret
 
-def     get_mean(cluster, X):
-    #Pour chaque data dans mon cluster
+
+# Calcul la moyenne de chaque nouveau centroids
+def find_cluster_mean(cluster, X):
     x = 0.0
     y = 0.0
     z = 0.0
     c_len = len(cluster)
     if c_len == 0:
-        index = random.randint(0,X.shape[0] - 1)
+        index = random.randint(0, X.shape[0] - 1)
         return X[index]
     for i in range(c_len):
         x += X[cluster[i]][0]
@@ -55,52 +57,59 @@ def     get_mean(cluster, X):
     y = y / c_len
     z = z / c_len
     return [x, y, z]
- 
+
 
 class KmeansClustering:
     def __init__(self, max_iter=20, ncentroid=4):
-        self.ncentroid = ncentroid # number of centroids
-        self.max_iter = max_iter # iteration max to updates centroids
-        self.centroids = [] # centroids values
-        self.clusters = [[] for i in range(self.ncentroid)]
-        
-     
+        self.ncentroid = ncentroid
+        self.max_iter = max_iter
+        self.centroids = []
+
+    # Run the Kmeans Algo
     def fit(self, X):
         self.min_list = np.amin(X, 0)
         self.max_list = np.amax(X, 0)
+
         # Get centroids random value from within dataset
         for i in range(self.ncentroid):
             index = random.randint(0, X.shape[0] - 1)
             self.centroids.append(X[index].tolist())
+        # Run the Kmeans algo
         prev_centroids = []
         for iteration in range(self.max_iter):
-            data_arr = self.predict(X)
-            new_centroids = self.get_clusters_means(data_arr, X)
-            if np.array_equal(np.array(new_centroids), np.array(self.centroids)):
+            predict_arr = self.predict(X)
+            new_centroids = self.find_new_centroids(predict_arr, X)
+
+            # Stop before max_iter if Kmeans is found
+            if np.array_equal(np.array(new_centroids),
+                              np.array(self.centroids)):
                 break
             self.centroids = new_centroids
         self.display_result()
         return
 
+    # Get distance between point to every centroids
+    # Returns array with every point with index to its closest centroid
     def predict(self, X):
         predict = np.zeros((X.shape[0], 1))
         for i in range(X.shape[0]):
             predict[i] = get_distance(X[i], self.centroids,
                                       self.min_list, self.max_list)
-        count = [0, 0, 0, 0]
-        for i in range(predict.shape[0]):
-            count[int(predict[i][0])] += 1
         return predict
 
-    def get_clusters_means(self, data_arr, X):
-        self.clusters.clear()
-        self.clusters= [[] for i in range(self.ncentroid)]
-        for i in range(data_arr.shape[0]):
-            self.clusters[int(data_arr[i][0])].append(i)
-        means = [[] for i in range(self.ncentroid)]
+    def find_new_centroids(self, predict_arr, X):
+        cluster = [[] for i in range(self.ncentroid)]
+        # Cree une list de cluster contenant leurs
+        # datapoints associe
+        for datapoint in range(data_arr.shape[0]):
+            idx = int(predict_arr[datapoint][0])
+            cluster[idx].append(datapoint)
+        new_centroids = []
         for i in range(self.ncentroid):
-            means[i] = get_mean(self.clusters[i], X)
-        return means
+            new_centroids.append(find_cluster_mean(cluster[i], X))
+        # To count individual a the end
+        self.clusters = cluster
+        return new_centroids
 
     def display_result(self):
         if (self.ncentroid == 4):
@@ -122,49 +131,81 @@ class KmeansClustering:
                     else:
                         mars = i
             if self.centroids[venus][0] > self.centroids[earth][0]\
-                and self.centroids[venus][1] < self.centroids[earth][1]:
-                    pass
+                    and self.centroids[venus][1] < self.centroids[earth][1]:
+                pass
             else:
                 tmp = mars
                 mars = venus
                 venus = tmp
-            print("\nmars : {} | earth {} | venus {} | belt {}\n".format(mars, earth, venus, belt))
+            self.mars = mars
+            self.venus = venus
+            self.earth = earth
+            self.belt = belt
 
             print(" -Mars   : K[{}] : val {}  : {}\n"
-                  .format(mars, self.centroids[mars], len(self.clusters[mars])),
+                  .format(mars, self.centroids[mars],
+                          len(self.clusters[mars])),
                   "-Belt   : K[{}] : val {}   : {}\n"
-                  .format(belt, self.centroids[belt], len(self.clusters[belt])),
+                  .format(belt, self.centroids[belt],
+                          len(self.clusters[belt])),
                   "-Earth  : K[{}] : val {}   : {}\n"
-                  .format(earth, self.centroids[earth], len(self.clusters[earth])),
+                  .format(earth, self.centroids[earth],
+                          len(self.clusters[earth])),
                   "-Venus  : K[{}] : val {}   : {}\n"
-                  .format(venus, self.centroids[venus], len(self.clusters[venus])))
-    
+                  .format(venus, self.centroids[venus],
+                          len(self.clusters[venus])))
+
+
 def plot_res_3d(X, kmeans):
-    
+
     predict = kmeans.predict(X)
     fig = plt.figure()
     ax = fig.add_subplot(projection='3d')
 
-    color= ["lightpink", "cyan", "lightgreen", "salmon"]
     for j in range(0, kmeans.ncentroid):
         for i in range(X.shape[0]):
-            if predict[i] == j:
-                ax.scatter(X[i][0], X[i][1], X[i][2], c=color[j % 4])
-    color2= ["magenta", "b", "g", "r"]
-    for i in range(0, kmeans.ncentroid):
-        ax.scatter(kmeans.centroids[i][0], kmeans.centroids[i][1], kmeans.centroids[i][2], c=color2[i % 4])
+            if predict[i] == kmeans.mars:
+                color2 = "lightsalmon"
+            elif predict[i] == kmeans.earth:
+                color2 = "skyblue"
+            elif predict[i] == kmeans.venus:
+                color2 = "gold"
+            elif predict[i] == kmeans.belt:
+                color2 = "palegreen"
+            else:
+                color2 = "black"
+            ax.scatter(X[i][0], X[i][1], X[i][2], c=color2)
+    ax.scatter(kmeans.centroids[kmeans.mars][0],
+               kmeans.centroids[kmeans.mars][1],
+               kmeans.centroids[kmeans.mars][2],
+               c="r", label="Mars")
+    ax.scatter(kmeans.centroids[kmeans.earth][0],
+               kmeans.centroids[kmeans.earth][1],
+               kmeans.centroids[kmeans.earth][2],
+               c="b", label="Earth")
+    ax.scatter(kmeans.centroids[kmeans.venus][0],
+               kmeans.centroids[kmeans.venus][1],
+               kmeans.centroids[kmeans.venus][2],
+               c="orange", label="Venus")
+    ax.scatter(kmeans.centroids[kmeans.belt][0],
+               kmeans.centroids[kmeans.belt][1],
+               kmeans.centroids[kmeans.belt][2],
+               c="green", label="Belt")
+
     ax.set_xlabel("Height")
     ax.set_ylabel("Weight")
     ax.set_zlabel("Bone")
+    plt.legend()
     plt.show()
+
 
 if (len(sys.argv) != 4):
     print("Error : Usage : <file_path.csv> <ncentroid=int> <max_iter=int>")
     exit(1)
 path = sys.argv[1]
-try :
+try:
     with CsvReader(path, ",", True) as csv_file:
-        if csv_file == None:
+        if csv_file is None:
             print("file could not be opened")
             exit()
         ncentroid = sys.argv[2].split("=")

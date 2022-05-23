@@ -27,7 +27,6 @@ class CsvReader():
 
     def __enter__(self):
 
-
         if not self.open_ok:
             return None
         first_loop = 1
@@ -41,7 +40,7 @@ class CsvReader():
 
             # Check absence de chaine vide
             for i in self.data[-1]:
-                if len(i) <= 0 and not first_loop :
+                if len(i) <= 0 and not first_loop:
                     self.data = None
                     return None
             if len(self.data[-1]) != self.field_nb:
@@ -53,7 +52,7 @@ class CsvReader():
 
     def __exit__(self, type, value, traceback):
         if value or traceback or type:
-            print("Error caught: {} : {} : {}".format(type , value, traceback))
+            print("Error caught: {} : {} : {}".format(type, value, traceback))
         if self.open_ok:
             self.file.close()
         return False
