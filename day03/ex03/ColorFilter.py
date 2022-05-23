@@ -56,21 +56,19 @@ class ColorFilter:
             g = lst[1]
             b = lst[2]
         means = [r, g, b]
-        gray_arr = np.tile(array[..., 0:3], 1)
+        x = array.shape[0]
+        y = array.shape[1]
+        z = 3
+        gray_arr = np.broadcast_to(arr, arr.shape)
         gray_arr = gray_arr[..., [0, 1, 2]] * means
-        sum_arr = np.sum(gray_arr, 2)
-        for i in range(array.shape[0]):
-            for j in range(array.shape[1]):
-                gray_arr[i, j, [0, 1, 2]] = [sum_arr[i, j],
-                                             sum_arr[i, j],
-                                             sum_arr[i, j]]
+        sum_arr = np.sum(gray_arr, axis=2, keepdims=True)
+        gray_arr = np.broadcast_to(sum_arr, (x, y, 3))
         return gray_arr
 
 
 imp = ImageProcessor()
 arr = imp.load("elon.png")
 cf = ColorFilter()
-
 # Original Img
 imp.display(arr)
 
@@ -97,6 +95,7 @@ imp.display(red_arr)
 imp.display(arr)
 
 # Gray
+# Test avec differentes avec 3 nuances de gris
 gray_arr = cf.to_grayscale(arr, "m")
 imp.display(gray_arr)
 imp.display(arr)
