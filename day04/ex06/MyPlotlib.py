@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from FileLoader import FileLoader
-#import seaborn as sb
+import seaborn as sns
 #import scipy as sp
 
 def wrong_params(data, features):
@@ -15,7 +15,7 @@ def wrong_params(data, features):
             if not isinstance(tmp.min(), (float, int)):
                 raise TypeError("Error : Features \"{}\" is not numerical"
                                 .format(var))
-        return 0
+                return 0
     except Exception as msg:
         if type(msg) == KeyError:
             print("Key Error: {} is not a valid Dataframe column".format(msg))
@@ -31,18 +31,39 @@ class MyPlotLib:
 
     def histogram(self, data, features):
         if wrong_params(data, features):
-            return 0
+            return 1
         for var in features:
             data_var = data[['ID', var]].drop_duplicates().dropna()
             data_var = data_var[var]
             print(var)
-            plt.hist(data_var, range=[data_var.min(), data_var.max()])
-            plt.legend(var)
+            plt.hist(data_var,
+                     range=[data_var.min(), data_var.max()],
+                     edgecolor='black')
+            plt.legend(title=var)
             plt.show()
-        return 1
+        return 0
 
     def density(self, data, features):
-        pass
+        if wrong_params(data, features):
+            return 1
+        kde_list = []
+        label_list = []
+        for var in features:
+            data_var = data[['ID', var]].drop_duplicates().dropna()
+            data_var = data_var[var]
+            kde_list.append(data_var)
+            label_list.append(var)
+            """
+            plt.hist(data_var, range=[data_var.min(), data_var.max()], density=True)
+            plt.legend(var)
+            plt.show()
+            """
+        plt.figure()
+        for i in range(len(kde_list)):
+            sns.kdeplot(kde_list[i], label=label_list[i])
+        plt.legend(labels=label_list)
+        plt.show()
+        return 0
 
     def pair_plot(self, data, features):
         pass
@@ -56,3 +77,4 @@ loader = FileLoader()
 data = loader.load("athlete_events.csv")
 myplot = MyPlotLib()
 myplot.histogram(data, ['Height', 'Weight'])
+myplot.density(data, ['Height', 'Weight'])
