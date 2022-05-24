@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from FileLoader import FileLoader
 import seaborn as sns
 
+
 def wrong_params(data, features):
     print("Params check ....")
     try:
@@ -22,7 +23,7 @@ def wrong_params(data, features):
             print("Key Error: {} is not a valid Dataframe column".format(msg))
         else:
             print(msg)
-        return  1
+        return 1
 
 
 class MyPlotLib:
@@ -57,26 +58,25 @@ class MyPlotLib:
     def pair_plot(self, data, features):
         if wrong_params(data, features):
             return 1
-        #seaborn
+        # seaborn
         sns.pairplot(data[features])
         """
-        #matplotlib
+        # matplotlib
         to_plot = data[features]
         to_plot.plot.scatter(features[0], features[1])
         to_plot.plot.scatter(features[1], features[0])
         """
         plt.show()
-      
 
     def box_plot(self, data, features):
         if wrong_params(data, features):
             return 1
-        print("Box plot ...")
         to_plot = data[features]
         to_plot.boxplot()
         plt.show()
 
-if len(sys.argv) !=  1:
+
+if len(sys.argv) != 1:
     sys.exit("Usage : python3 <exec_file>")
 loader = FileLoader()
 data = loader.load("athlete_events.csv")

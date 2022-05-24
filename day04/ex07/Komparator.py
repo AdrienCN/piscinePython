@@ -3,17 +3,18 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+
 def wrong_params(category, numerical, dataset):
     if not isinstance(numerical, str)\
-        or not isinstance(category, str):
-            print("Error : Wrong params : category and numerical must be str")
-            return 1
+            or not isinstance(category, str):
+        print("Error : Wrong params : category and numerical must be str")
+        return 1
     try:
-        
         is_valid = dataset[category]
         is_numeric = dataset[numerical]
-        if not is instance(is_numeric.min(), (int, float)):
-            raise TypeError()
+        if not isinstance(is_numeric.min(), (int, float)):
+            print("Error : Wrong params : numerical is not int or float")
+            return 1
     except Exception as msg:
         print("Error : Wrong params : {} or {} not in dataset : {}"
               .format(category, numerical))
@@ -22,9 +23,9 @@ def wrong_params(category, numerical, dataset):
 
 
 class Komparator():
-    
+
     def __init__(self, dataset):
-        self.data  =  dataset
+        self.data = dataset
 
     def compare_box_plots(self, categorical_var, numerical_var):
         if wrong_params(categorical_var, numerical_var, self.data):
@@ -38,7 +39,6 @@ class Komparator():
             to_plot = to_plot.loc[(to_plot[cat] == subcat)]
             to_plot = to_plot[numerical_var]
             plot_list.append(to_plot)
-            
         plt.boxplot(plot_list)
         plt.xticks([i + 1 for i in range(len(cat_list))], cat_list)
         plt.ylabel(numerical_var)
@@ -60,7 +60,6 @@ class Komparator():
         plt.xlabel(numerical_var)
         plt.legend(title=cat)
         plt.show()
-
 
     def compare_histograms(self, categorical_var, numerical_var):
         if wrong_params(categorical_var, numerical_var, self.data):
@@ -85,9 +84,10 @@ class Komparator():
         plt.show()
         return 0
 
+
 loader = FileLoader()
 data = loader.load("athlete_events.csv")
 kpt = Komparator(data)
-#kpt.compare_histograms('Medal', 'Height')
-#kpt.compare_box_plots('Sex', 'Height')
-kpt.density('Medal', 'Sex')
+kpt.compare_histograms('Medal', 'Weight')
+kpt.compare_box_plots('Medal', 'Weight')
+kpt.density('Medal', 'Weight')
