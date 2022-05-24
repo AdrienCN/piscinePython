@@ -1,6 +1,7 @@
 from FileLoader import FileLoader
 import sys
 
+
 def howManyMedals(data, name):
     # Get all row where name == name
     df = data.loc[data['Name'] == name]
@@ -8,7 +9,7 @@ def howManyMedals(data, name):
     year_list = df_year.to_list()
     dico = {}
     for year in year_list:
-        dico[year] = {'G':0, 'S':0, 'B':0}
+        dico[year] = {'G': 0, 'S': 0, 'B': 0}
         medal_list = df.loc[(df['Year'] == year)]
         medal_list = medal_list['Medal'].to_list()
         for medal in medal_list:
@@ -19,6 +20,7 @@ def howManyMedals(data, name):
             elif medal == 'Bronze':
                 dico[year]['B'] += 1
     return dico
+
 
 loader = FileLoader()
 data = loader.load("athlete_events.csv")

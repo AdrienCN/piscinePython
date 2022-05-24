@@ -1,6 +1,7 @@
 from FileLoader import FileLoader
 import pandas as pd
-import sys 
+import sys
+
 
 def proportionBySport(df, year, sport, sex):
     df_sex = df.loc[(df['Sex'] == sex) & (df['Year'] == year)]
@@ -9,6 +10,7 @@ def proportionBySport(df, year, sport, sex):
     group = df_zoom.shape[0]
     proportion = group / _all
     return proportion
+
 
 if len(sys.argv) != 4:
     printf("Usage : <Year>, <Sport>, <Sex>")

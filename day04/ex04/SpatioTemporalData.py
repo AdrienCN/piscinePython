@@ -1,6 +1,8 @@
 from FileLoader import FileLoader
 
-class SpatioTemporalData: 
+
+class SpatioTemporalData:
+
     def __init__(self, dataframe):
         self.df = dataframe
 
@@ -21,4 +23,3 @@ data = loader.load("athlete_events.csv")
 sp = SpatioTemporalData(data)
 print(sp.where(2016))
 print(sp.when("Paris"))
-
