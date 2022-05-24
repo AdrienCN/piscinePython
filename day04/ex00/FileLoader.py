@@ -16,12 +16,17 @@ class FileLoader():
             print(msg)
             return None
 
-    def display(df, n):
+    def display(self, df, n):
         try:
-            if n > 0:
-                df.head(n)
+            if n >= 0:
+                print(df.head(n))
             else:
-                df.tail(abs(n))
+                print(df.tail(abs(n)))
         except Exception as msg:
             print(msg)
             return None
+
+
+loader = FileLoader()
+data = loader.load("athlete_events.csv")
+loader.display(data, 12)
