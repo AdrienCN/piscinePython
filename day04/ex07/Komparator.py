@@ -9,8 +9,11 @@ def wrong_params(category, numerical, dataset):
             print("Error : Wrong params : category and numerical must be str")
             return 1
     try:
+        
         is_valid = dataset[category]
-        is_valid = dataset[numerical]
+        is_numeric = dataset[numerical]
+        if not is instance(is_numeric.min(), (int, float)):
+            raise TypeError()
     except Exception as msg:
         print("Error : Wrong params : {} or {} not in dataset : {}"
               .format(category, numerical))
@@ -44,7 +47,20 @@ class Komparator():
         return 0
 
     def density(self, categorical_var, numerical_var):
-        pass
+        if wrong_params(categorical_var, numerical_var, self.data):
+            return 1
+        cat = categorical_var
+        cat_list = self.data[cat].drop_duplicates().dropna().to_list()
+        for subcat in cat_list:
+            to_plot = self.data[[cat, numerical_var]].dropna()
+            to_plot = to_plot.loc[(to_plot[cat] == subcat)]
+            to_plot = to_plot[numerical_var]
+            sns.kdeplot(to_plot, label=subcat)
+        plt.ylabel("Density")
+        plt.xlabel(numerical_var)
+        plt.legend(title=cat)
+        plt.show()
+
 
     def compare_histograms(self, categorical_var, numerical_var):
         if wrong_params(categorical_var, numerical_var, self.data):
@@ -73,4 +89,5 @@ loader = FileLoader()
 data = loader.load("athlete_events.csv")
 kpt = Komparator(data)
 #kpt.compare_histograms('Medal', 'Height')
-kpt.compare_box_plots('Sex', 'Height')
+#kpt.compare_box_plots('Sex', 'Height')
+kpt.density('Medal', 'Sex')
