@@ -16,7 +16,7 @@ try:
 
     print("\nExpected output is:\n{'f': nan, 'm': nan}")
     print(youngestfellah(data, 2003))
-    
+
     sys.exit(0)
 except Exception as msg:
     print(msg)

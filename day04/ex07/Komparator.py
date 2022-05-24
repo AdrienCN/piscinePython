@@ -88,6 +88,6 @@ class Komparator():
 loader = FileLoader()
 data = loader.load("athlete_events.csv")
 kpt = Komparator(data)
-kpt.compare_histograms('Medal', 'Weight')
-kpt.compare_box_plots('Medal', 'Weight')
+kpt.compare_histograms('Medal', 'Age')
+kpt.compare_box_plots('Medal', 'Height')
 kpt.density('Medal', 'Weight')

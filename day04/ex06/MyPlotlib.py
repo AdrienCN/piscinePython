@@ -7,7 +7,6 @@ import seaborn as sns
 
 
 def wrong_params(data, features):
-    print("Params check ....")
     try:
         if not isinstance(features, list):
             raise TypeError("Error : Features must be a list")
@@ -16,7 +15,6 @@ def wrong_params(data, features):
             if not isinstance(tmp.min(), (float, int)):
                 raise TypeError("Error : Features \"{}\" is not numerical"
                                 .format(var))
-        print("Params ok !")
         return 0
     except Exception as msg:
         if type(msg) == KeyError:
@@ -39,8 +37,9 @@ class MyPlotLib:
             data_var = data_var[var]
             plt.hist(data_var,
                      range=[data_var.min(), data_var.max()],
-                     edgecolor='black', label=var)
-            plt.legend()
+                     edgecolor='black')
+            plt.xlabel(var)
+            plt.ylabel("Occurence")
             plt.show()
         return 0
 
@@ -51,6 +50,7 @@ class MyPlotLib:
             data_var = data[['ID', var]].drop_duplicates().dropna()
             data_var = data_var[var]
             sns.kdeplot(data_var, label=var)
+        plt.xlabel(None)
         plt.legend()
         plt.show()
         return 0
@@ -81,7 +81,7 @@ if len(sys.argv) != 1:
 loader = FileLoader()
 data = loader.load("athlete_events.csv")
 myplot = MyPlotLib()
-myplot.histogram(data, ['Height', 'Weight'])
-myplot.density(data, ['Height', 'Weight'])
-myplot.pair_plot(data, ['Height', 'Weight'])
-myplot.box_plot(data, ['Height', 'Weight'])
+myplot.histogram(data, ['Weight', 'Height'])
+myplot.density(data, ['Weight', 'Height'])
+myplot.pair_plot(data, ['Weight', 'Height'])
+myplot.box_plot(data, ['Weight', 'Height'])
