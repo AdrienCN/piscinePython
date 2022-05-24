@@ -12,15 +12,14 @@ def proportionBySport(df, year, sport, sex):
     return proportion
 
 
-if len(sys.argv) != 4:
-    printf("Usage : <Year>, <Sport>, <Sex>")
-    quit()
-
-year = int(sys.argv[1])
-sport = sys.argv[2]
-sex = sys.argv[3]
 loader = FileLoader()
-df = loader.load("athlete_events.csv")
+data = loader.load("athlete_events.csv")
 
-ret = proportionBySport(df, year, sport, sex)
-print("Res : ", ret)
+print("Expected output is :\n0.02307...")
+print(proportionBySport(data, 2004, 'Tennis', 'F'), end = "\n\n")
+
+print("Expected output is :\n0.03284...")
+print(proportionBySport(data, 2008, 'Hockey', 'F'), end = "\n\n")
+
+print("Expected output is :\n0.00659...")
+print(proportionBySport(data, 1964, 'Biathlon', 'M'), end = "\n\n")
