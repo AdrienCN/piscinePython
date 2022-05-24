@@ -25,11 +25,15 @@ def howManyMedals(data, name):
 loader = FileLoader()
 data = loader.load("athlete_events.csv")
 
-if (len(sys.argv) != 2):
-    print("Usage : <athlete's name>")
-    quit()
+print("Expected output is:\n"
+      " {1976: {'G': 0, 'S': 0, 'B': 0}, 1980: {'G': 0, 'S': 0, 'B': 1}}")
+print("res:\n", howManyMedals(data, 'Gary Abraham'))
 
-name = sys.argv[1]
-_dict = howManyMedals(data, name)
-for key, value in _dict.items():
-    print(key, " : ", value)
+print("\nExpected output is:\n"
+      " {2006: {'G': 0, 'S': 0, 'B': 1}, 2010: {'G': 0, 'S': 0, 'B': 0}}")
+print("res:\n", howManyMedals(data, 'Yekaterina Konstantinovna Abramova'))
+
+print("\nExpected output is:\n"
+      " {1988: {'G': 6, 'S': 0, 'B': 0}}")
+
+print("res\n", howManyMedals(data, 'Kristin Otto'))
